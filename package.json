@@ -1,6 +1,6 @@
 {
   "name": "rwb-helpers",
-  "description": "manifest.json description",
+  "description": "Various utilities for my browsing",
   "private": true,
   "version": "0.0.1",
   "type": "module",

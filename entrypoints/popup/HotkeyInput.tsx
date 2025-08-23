@@ -39,7 +39,7 @@ export function HotkeyInput({ value, onChange }: HotkeyInputProps) {
           case "shift":
             return "⇧";
           default:
-            return key.toUpperCase();
+            return key.toLowerCase();
         }
       })
       .join(" + ");
@@ -54,7 +54,7 @@ export function HotkeyInput({ value, onChange }: HotkeyInputProps) {
   const stopRecording = () => {
     setIsRecording(false);
     if (currentKeys.length > 0) {
-      const newHotkey = formatHotkey(currentKeys);
+      const newHotkey = formatHotkey(currentKeys).toLowerCase();
       onChange(newHotkey);
     }
     setCurrentKeys([]);
@@ -116,7 +116,7 @@ export function HotkeyInput({ value, onChange }: HotkeyInputProps) {
               case "shift":
                 return "⇧";
               default:
-                return key.toUpperCase();
+                return key.toLowerCase();
             }
           })
           .join(" + ")

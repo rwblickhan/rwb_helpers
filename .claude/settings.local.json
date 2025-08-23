@@ -6,7 +6,8 @@
       "Bash(mkdir:*)",
       "Bash(pnpm run:*)",
       "Bash(cp:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "WebSearch"
     ],
     "deny": []
   }

@@ -12,7 +12,7 @@ const DEFAULT_SETTINGS: Settings = {
 export function App() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaved, setIsSaved] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
 
   useEffect(() => {
     loadSettings();
@@ -30,18 +30,20 @@ export function App() {
     setIsLoading(false);
   };
 
-  const saveSettings = async () => {
+  const saveSettings = async (newSettings: Settings) => {
     try {
-      await browser.storage.sync.set({ hotkeySettings: settings });
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 2000);
+      await browser.storage.sync.set({ hotkeySettings: newSettings });
+      setJustSaved(true);
+      setTimeout(() => setJustSaved(false), 1500);
     } catch (error) {
       console.error("Failed to save settings:", error);
     }
   };
 
   const updateHotkey = (feature: keyof Settings, hotkey: string) => {
-    setSettings((prev) => ({ ...prev, [feature]: hotkey }));
+    const newSettings = { ...settings, [feature]: hotkey };
+    setSettings(newSettings);
+    saveSettings(newSettings);
   };
 
   if (isLoading) {
@@ -51,7 +53,7 @@ export function App() {
   return (
     <div className="popup-app">
       <header className="popup-header">
-        <h1>RWB Helpers</h1>
+        <h1>rwb helpers</h1>
       </header>
 
       <main className="popup-main">
@@ -59,7 +61,7 @@ export function App() {
           <div className="setting-info">
             <span className="setting-name">Copy Markdown Link</span>
             <span className="setting-description">
-              Copy current page as markdown link
+              Copy current page as Markdown link
             </span>
           </div>
           <HotkeyInput
@@ -68,13 +70,7 @@ export function App() {
           />
         </div>
 
-        <button
-          className="save-button"
-          onClick={saveSettings}
-          disabled={isSaved}
-        >
-          {isSaved ? "Saved!" : "Save Settings"}
-        </button>
+        {justSaved && <div className="save-feedback">Saved!</div>}
       </main>
     </div>
   );

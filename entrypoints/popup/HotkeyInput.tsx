@@ -133,17 +133,9 @@ export function HotkeyInput({ value, onChange }: HotkeyInputProps) {
         onBlur={handleBlur}
         onFocus={startRecording}
         readOnly
-        placeholder="Click to record hotkey"
+        placeholder={isRecording ? "Press keys..." : "Click to record hotkey"}
         className={`hotkey-field ${isRecording ? "recording" : ""}`}
       />
-      <button
-        type="button"
-        onClick={startRecording}
-        className="record-button"
-        disabled={isRecording}
-      >
-        {isRecording ? "Recording..." : "Record"}
-      </button>
     </div>
   );
 }

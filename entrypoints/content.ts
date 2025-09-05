@@ -3,17 +3,22 @@ function showNotification(message: string) {
   const container = document.createElement("div");
 
   container.style.cssText = `
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border: none;
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    pointer-events: none;
-    overflow: visible;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    pointer-events: none !important;
+    overflow: visible !important;
+    z-index: 2147483647 !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
   `;
 
   const shadow = container.attachShadow({ mode: "closed" });
@@ -24,31 +29,35 @@ function showNotification(message: string) {
   const style = document.createElement("style");
   style.textContent = `
     div {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: hsl(208 100% 45%);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 4px;
-      z-index: 10000;
-      font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
-      font-size: 17px;
-      width: fit-content;
-      max-width: 300px;
-      word-wrap: break-word;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      margin: 0;
-      border: none;
-      outline: none;
-      line-height: 1.4;
-      letter-spacing: normal;
-      text-align: left;
-      text-decoration: none;
-      text-transform: none;
-      white-space: normal;
-      pointer-events: auto;
+      position: fixed !important;
+      top: 20px !important;
+      right: 20px !important;
+      background: hsl(208 100% 45%) !important;
+      color: white !important;
+      padding: 10px 20px !important;
+      border-radius: 4px !important;
+      z-index: 2147483647 !important;
+      font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif !important;
+      font-size: 17px !important;
+      width: fit-content !important;
+      max-width: 300px !important;
+      word-wrap: break-word !important;
+      cursor: pointer !important;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+      margin: 0 !important;
+      border: none !important;
+      outline: none !important;
+      line-height: 1.4 !important;
+      letter-spacing: normal !important;
+      text-align: left !important;
+      text-decoration: none !important;
+      text-transform: none !important;
+      white-space: normal !important;
+      pointer-events: auto !important;
+      transform: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
     }
   `;
 

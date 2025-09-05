@@ -1,54 +1,22 @@
-import { useState, useEffect } from "preact/hooks";
-import { HotkeyInput } from "./HotkeyInput";
-
-interface Settings {
-  copyMarkdownLink: string;
-}
-
-const DEFAULT_SETTINGS: Settings = {
-  copyMarkdownLink: "cmd+shift+l",
-};
-
 export function App() {
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
-  const [isLoading, setIsLoading] = useState(true);
-  const [justSaved, setJustSaved] = useState(false);
-
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const result = await browser.storage.sync.get("hotkeySettings");
-      if (result.hotkeySettings) {
-        setSettings({ ...DEFAULT_SETTINGS, ...result.hotkeySettings });
-      }
-    } catch (error) {
-      console.error("Failed to load settings:", error);
+  const openShortcutsPage = () => {
+    // Cross-browser shortcuts page URLs
+    const userAgent = navigator.userAgent.toLowerCase();
+    let shortcutsUrl;
+    
+    if (userAgent.includes('firefox')) {
+      // Firefox uses about:addons with a specific view
+      shortcutsUrl = "about:addons";
+    } else if (userAgent.includes('safari')) {
+      // Safari doesn't have a direct shortcuts page, open preferences
+      shortcutsUrl = "safari://preferences/extensions";
+    } else {
+      // Chrome/Chromium-based browsers
+      shortcutsUrl = "chrome://extensions/shortcuts";
     }
-    setIsLoading(false);
+    
+    browser.tabs.create({ url: shortcutsUrl });
   };
-
-  const saveSettings = async (newSettings: Settings) => {
-    try {
-      await browser.storage.sync.set({ hotkeySettings: newSettings });
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 1500);
-    } catch (error) {
-      console.error("Failed to save settings:", error);
-    }
-  };
-
-  const updateHotkey = (feature: keyof Settings, hotkey: string) => {
-    const newSettings = { ...settings, [feature]: hotkey };
-    setSettings(newSettings);
-    saveSettings(newSettings);
-  };
-
-  if (isLoading) {
-    return <div className="loading">Loading...</div>;
-  }
 
   return (
     <div className="popup-app">
@@ -61,16 +29,19 @@ export function App() {
           <div className="setting-info">
             <span className="setting-name">Copy Markdown Link</span>
             <span className="setting-description">
-              Copy current page as Markdown link
+              Use keyboard shortcut: Cmd+Shift+L (Mac) / Ctrl+Shift+L (Windows/Linux)
             </span>
           </div>
-          <HotkeyInput
-            value={settings.copyMarkdownLink}
-            onChange={(hotkey) => updateHotkey("copyMarkdownLink", hotkey)}
-          />
+          <div className="setting-controls">
+            <button 
+              className="action-button" 
+              onClick={openShortcutsPage}
+              title="Configure keyboard shortcuts"
+            >
+              Configure Shortcuts
+            </button>
+          </div>
         </div>
-
-        {justSaved && <div className="save-feedback">Saved!</div>}
       </main>
     </div>
   );

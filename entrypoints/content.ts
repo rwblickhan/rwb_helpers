@@ -1,24 +1,3 @@
-interface HotkeySettings {
-  copyMarkdownLink: string;
-}
-
-const DEFAULT_SETTINGS: HotkeySettings = {
-  copyMarkdownLink: "cmd+shift+l",
-};
-
-function parseHotkey(hotkey: string) {
-  const parts = hotkey.toLowerCase().split("+");
-  return {
-    metaKey: parts.includes("cmd") || parts.includes("meta"),
-    ctrlKey: parts.includes("ctrl"),
-    altKey: parts.includes("alt"),
-    shiftKey: parts.includes("shift"),
-    key:
-      parts.find(
-        (part) => !["cmd", "meta", "ctrl", "alt", "shift"].includes(part)
-      ) || "",
-  };
-}
 
 function showNotification(message: string) {
   const container = document.createElement("div");
@@ -84,20 +63,16 @@ function showNotification(message: string) {
   setTimeout(() => container.remove(), 3000);
 }
 
-function copyMarkdownLink() {
-  const title = document.title;
-  const url = window.location.href;
-  const markdownLink = `[${title}](${url})`;
-
-  navigator.clipboard
-    .writeText(markdownLink)
-    .then(() => {
-      console.log("Copied to clipboard:", markdownLink);
-      showNotification("Copied link to clipboard!");
-    })
-    .catch((err) => {
-      console.error("Failed to copy to clipboard:", err);
-    });
+async function copyToClipboard(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+    console.log("Copied to clipboard:", text);
+    showNotification("Copied link to clipboard!");
+    return true;
+  } catch (err) {
+    console.error("Failed to copy to clipboard:", err);
+    return false;
+  }
 }
 
 export default defineContentScript({
@@ -105,36 +80,11 @@ export default defineContentScript({
   async main() {
     console.log("rwb_helpers loaded on:", window.location.href);
 
-    let settings = DEFAULT_SETTINGS;
-    let copyLinkHotkey = parseHotkey(settings.copyMarkdownLink);
-
-    try {
-      const result = await browser.storage.sync.get("hotkeySettings");
-      if (result.hotkeySettings) {
-        settings = { ...DEFAULT_SETTINGS, ...result.hotkeySettings };
-        copyLinkHotkey = parseHotkey(settings.copyMarkdownLink);
-      }
-    } catch (error) {
-      console.error("Failed to load hotkey settings:", error);
-    }
-
-    document.addEventListener("keydown", (event) => {
-      if (
-        event.metaKey === copyLinkHotkey.metaKey &&
-        event.ctrlKey === copyLinkHotkey.ctrlKey &&
-        event.altKey === copyLinkHotkey.altKey &&
-        event.shiftKey === copyLinkHotkey.shiftKey &&
-        event.key.toLowerCase() === copyLinkHotkey.key
-      ) {
-        event.preventDefault();
-        copyMarkdownLink();
-      }
-    });
-
-    browser.storage.onChanged.addListener((changes, namespace) => {
-      if (namespace === "sync" && changes.hotkeySettings) {
-        settings = { ...DEFAULT_SETTINGS, ...changes.hotkeySettings.newValue };
-        copyLinkHotkey = parseHotkey(settings.copyMarkdownLink);
+    // Listen for messages from the background script
+    browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+      if (message.action === "copyToClipboard") {
+        const success = await copyToClipboard(message.text);
+        sendResponse({ success });
       }
     });
   },

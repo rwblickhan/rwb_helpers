@@ -8,10 +8,13 @@ export default defineConfig({
     commands: {
       "copy-markdown-link": {
         suggested_key: {
-          default: "Ctrl+Shift+L"
+          default: "Ctrl+Shift+L",
         },
-        description: "Copy current page as Markdown link"
-      }
-    }
-  }
+        description: "Copy current page as Markdown link",
+      },
+    },
+    chrome_url_overrides: {
+      newtab: "newtab/index.html",
+    },
+  },
 });

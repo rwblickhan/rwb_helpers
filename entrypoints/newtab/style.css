@@ -39,3 +39,8 @@ a {
 a:hover {
   color: var(--rwb-link);
 }
+
+ul {
+  list-style-position: inside;
+  padding-left: 0;
+}

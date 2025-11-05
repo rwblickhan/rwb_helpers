@@ -33,8 +33,26 @@ export function App() {
             </span>
           </div>
           <div className="setting-controls">
-            <button 
-              className="action-button" 
+            <button
+              className="action-button"
+              onClick={openShortcutsPage}
+              title="Configure keyboard shortcuts"
+            >
+              Configure Shortcuts
+            </button>
+          </div>
+        </div>
+
+        <div className="setting-item">
+          <div className="setting-info">
+            <span className="setting-name">Send to Drafts</span>
+            <span className="setting-description">
+              Use keyboard shortcut: Cmd+Shift+D (Mac) / Ctrl+Shift+D (Windows/Linux)
+            </span>
+          </div>
+          <div className="setting-controls">
+            <button
+              className="action-button"
               onClick={openShortcutsPage}
               title="Configure keyboard shortcuts"
             >

@@ -12,6 +12,12 @@ export default defineConfig({
         },
         description: "Copy current page as Markdown link",
       },
+      "send-to-drafts": {
+        suggested_key: {
+          default: "Ctrl+Shift+D",
+        },
+        description: "Send current page to Drafts",
+      },
     },
     chrome_url_overrides: {
       newtab: "newtab/index.html",

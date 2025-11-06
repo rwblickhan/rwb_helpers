@@ -3,18 +3,19 @@ export function App() {
     // Cross-browser shortcuts page URLs
     const userAgent = navigator.userAgent.toLowerCase();
     let shortcutsUrl;
-    
+
     if (userAgent.includes('firefox')) {
       // Firefox uses about:addons with a specific view
       shortcutsUrl = "about:addons";
-    } else if (userAgent.includes('safari')) {
+    } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
       // Safari doesn't have a direct shortcuts page, open preferences
+      // Note: Chrome's UA includes "safari" so we must exclude it
       shortcutsUrl = "safari://preferences/extensions";
     } else {
       // Chrome/Chromium-based browsers
       shortcutsUrl = "chrome://extensions/shortcuts";
     }
-    
+
     browser.tabs.create({ url: shortcutsUrl });
   };
 
